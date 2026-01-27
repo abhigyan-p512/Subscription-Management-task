@@ -1,0 +1,682 @@
+.subscribe {
+  padding: 40px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: calc(100vh - 200px);
+}
+
+/* ============================================
+   PAGE HEADER
+   ============================================ */
+.page-header {
+  margin-bottom: 40px;
+}
+
+.page-header h2 {
+  font-size: 32px;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing);
+}
+
+.page-header p {
+  font-size: 16px;
+  color: var(--text-secondary);
+  margin: 0;
+  letter-spacing: var(--letter-spacing);
+}
+
+/* ============================================
+   SETUP REQUIRED BANNER
+   ============================================ */
+.setup-required-banner {
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.setup-required-banner h4 {
+  font-size: 18px;
+  color: #fbbf24;
+  margin: 0 0 12px 0;
+  font-family: var(--font-heading);
+}
+
+.setup-required-banner p {
+  margin: 0 0 12px 0;
+  color: var(--text-secondary);
+  font-size: 15px;
+}
+
+.setup-required-banner ol {
+  margin: 0 0 12px 0;
+  padding-left: 24px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.setup-required-banner li {
+  margin-bottom: 8px;
+}
+
+.setup-required-banner code {
+  background: rgba(251, 191, 36, 0.2);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 13px;
+  color: #fbbf24;
+}
+
+.setup-required-banner a {
+  color: var(--accent-primary);
+  text-decoration: none;
+  transition: all var(--transition-normal);
+}
+
+.setup-required-banner a:hover {
+  text-decoration: underline;
+  text-shadow: 0 0 10px var(--accent-glow);
+}
+
+/* ============================================
+   PRICE SELECTOR
+   ============================================ */
+.price-selector {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.price-selector.disabled {
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+.price-card {
+  background: var(--gradient-card);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  padding: 28px 26px;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.price-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: var(--radius-xl);
+  opacity: 0;
+  background: linear-gradient(135deg, rgba(30, 144, 255, 0.15) 0%, rgba(59, 130, 246, 0.15) 100%);
+  transition: opacity var(--transition-normal);
+  pointer-events: none;
+}
+
+.price-card:hover {
+  border-color: var(--accent-primary);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: var(--shadow-lg), var(--glow-primary);
+}
+
+.price-card:hover::before {
+  opacity: 1;
+}
+
+.price-card.selected {
+  border-color: var(--accent-primary);
+  background: rgba(59, 130, 246, 0.12);
+  box-shadow: var(--shadow-lg), var(--glow-hover);
+}
+
+.price-card.selected::before {
+  opacity: 1;
+}
+
+.price-card.recommended {
+  border-color: rgba(59, 130, 246, 0.45);
+}
+
+.price-card.unavailable {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.price-card.unavailable:hover {
+  transform: none;
+  border-color: var(--border-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.price-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+  position: relative;
+  z-index: 1;
+}
+
+.price-card-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.plan-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-secondary);
+  background: rgba(59, 130, 246, 0.14);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+}
+
+.plan-badge-recommended {
+  color: #ffffff;
+  background: var(--gradient-primary);
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 18px rgba(59, 130, 246, 0.25);
+}
+
+.plan-badge-warning {
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.12);
+  border-color: rgba(251, 191, 36, 0.28);
+}
+
+.plan-check {
+  width: 28px;
+  height: 28px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  color: var(--status-active-text);
+  font-weight: 900;
+  box-shadow: 0 0 16px rgba(34, 197, 94, 0.18);
+}
+
+.price-card h3 {
+  font-size: 20px;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+  position: relative;
+  z-index: 1;
+}
+
+.price-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.price-card .price {
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--accent-primary);
+  margin-bottom: 4px;
+  font-family: var(--font-heading);
+  position: relative;
+  z-index: 1;
+  text-shadow: 0 0 20px var(--accent-glow);
+}
+
+.price-card .price-period {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 0;
+  position: relative;
+  z-index: 1;
+  white-space: nowrap;
+}
+
+.price-card .plan-description {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-top: 12px;
+  margin-bottom: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.plan-features {
+  list-style: none;
+  padding: 0;
+  margin: 18px 0 0;
+  display: grid;
+  gap: 10px;
+  position: relative;
+  z-index: 1;
+}
+
+.plan-features li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.plan-features li::before {
+  content: '✓';
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 6px;
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.25);
+  color: var(--status-active-text);
+  font-weight: 900;
+  flex: 0 0 auto;
+}
+
+/* ============================================
+   PAYMENT FORM CARD
+   ============================================ */
+.stripe-form {
+  max-width: 600px;
+  margin: 0 auto;
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: var(--shadow-lg), var(--glow-primary);
+  border: 1px solid var(--border-color);
+  animation: fadeInUp 0.4s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stripe-form h3 {
+  font-size: 24px;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
+  letter-spacing: var(--letter-spacing);
+}
+
+/* Saved payment methods (dark theme) */
+.saved-payment-methods {
+  margin-bottom: 20px;
+}
+
+.saved-payment-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.saved-payment-label {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.saved-add-btn {
+  flex: 0 0 auto;
+}
+
+.saved-payment-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.saved-payment-card {
+  width: 100%;
+  text-align: left;
+  padding: 14px 16px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  background: rgba(15, 20, 35, 0.55);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.saved-payment-card:hover {
+  border-color: var(--border-hover);
+  background: rgba(20, 30, 50, 0.6);
+  box-shadow: 0 0 18px rgba(59, 130, 246, 0.12);
+  transform: translateY(-1px);
+}
+
+.saved-payment-card.selected {
+  border-color: var(--accent-primary);
+  background: rgba(59, 130, 246, 0.12);
+  box-shadow: 0 0 22px rgba(59, 130, 246, 0.2);
+}
+
+.pm-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.pm-icon {
+  font-size: 20px;
+  opacity: 0.9;
+}
+
+.pm-text {
+  min-width: 0;
+}
+
+.pm-title {
+  font-weight: 800;
+  letter-spacing: var(--letter-spacing);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pm-subtitle {
+  margin-top: 2px;
+  font-size: 13px;
+  color: var(--text-muted);
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.pm-default {
+  color: var(--accent-secondary);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.pm-selected {
+  color: var(--accent-primary);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+/* ============================================
+   INPUT GROUP
+   ============================================ */
+.subscribe .input-group {
+  margin-bottom: 24px;
+}
+
+.subscribe .input-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+  letter-spacing: var(--letter-spacing);
+}
+
+/* ============================================
+   STRIPE ELEMENT WRAPPER (DARK THEME)
+   ============================================ */
+.stripe-element-wrapper {
+  padding: 16px 20px;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: rgba(15, 20, 35, 0.6);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: all var(--transition-normal);
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.stripe-element-wrapper:focus-within {
+  border-color: var(--accent-primary);
+  background: rgba(15, 20, 35, 0.8);
+  box-shadow: 0 0 0 3px var(--accent-glow),
+              inset 0 1px 2px rgba(0, 0, 0, 0.1),
+              inset 0 0 20px rgba(59, 130, 246, 0.1);
+  transform: translateY(-1px);
+}
+
+.stripe-element-wrapper:hover:not(:focus-within) {
+  border-color: var(--border-hover);
+  background: rgba(15, 20, 35, 0.7);
+}
+
+.stripe-element-wrapper .StripeElement {
+  width: 100%;
+}
+
+/* Override Stripe's default styles for dark theme */
+.stripe-element-wrapper .StripeElement--focus {
+  outline: none;
+}
+
+.stripe-element-wrapper .StripeElement--invalid {
+  color: #f87171;
+}
+
+.stripe-element-wrapper .StripeElement--complete {
+  color: var(--text-primary);
+}
+
+/* ============================================
+   TESTING HINT
+   ============================================ */
+.subscribe .testing-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 10px;
+  padding: 10px 12px;
+  background: rgba(251, 191, 36, 0.1);
+  border-radius: 6px;
+  border-left: 3px solid #fbbf24;
+}
+
+.subscribe .testing-hint::before {
+  content: '💡';
+  font-size: 16px;
+}
+
+/* ============================================
+   ERROR MESSAGE
+   ============================================ */
+.subscribe .error-message {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  padding: 14px 18px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.subscribe .error-message::before {
+  content: '⚠️';
+  font-size: 16px;
+}
+
+/* ============================================
+   BUTTON CONTAINER
+   ============================================ */
+.subscribe .button-group {
+  display: flex;
+  gap: 12px;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-color);
+}
+
+.subscribe .btn {
+  flex: 1;
+  padding: 14px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  letter-spacing: var(--letter-spacing);
+}
+
+.subscribe .btn-secondary {
+  background: rgba(59, 130, 246, 0.2);
+  color: var(--accent-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.subscribe .btn-secondary:hover:not(:disabled) {
+  background: rgba(59, 130, 246, 0.3);
+  border-color: var(--border-hover);
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+  transform: translateY(-1px);
+}
+
+.subscribe .btn-primary {
+  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+  color: white;
+  box-shadow: var(--glow-primary);
+}
+
+.subscribe .btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--glow-hover);
+}
+
+.subscribe .btn-primary:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.subscribe .btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* ============================================
+   CONTINUE BUTTON (PLAN SELECTION)
+   ============================================ */
+.subscribe > .btn-primary {
+  max-width: 300px;
+  margin: 0 auto;
+  display: block;
+  width: 100%;
+  padding: 16px 32px;
+  font-size: 16px;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+@media (max-width: 768px) {
+  .subscribe {
+    padding: 24px 16px;
+  }
+
+  .page-header h2 {
+    font-size: 28px;
+  }
+
+  .price-selector {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .stripe-form {
+    padding: 24px 20px;
+  }
+
+  .stripe-form h3 {
+    font-size: 20px;
+    margin-bottom: 24px;
+  }
+
+  .subscribe .button-group {
+    flex-direction: column;
+  }
+
+  .subscribe .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-header h2 {
+    font-size: 24px;
+  }
+
+  .page-header p {
+    font-size: 14px;
+  }
+
+  .price-card {
+    padding: 24px 20px;
+  }
+
+  .price-card .price {
+    font-size: 32px;
+  }
+
+  .stripe-form {
+    padding: 20px 16px;
+  }
+}

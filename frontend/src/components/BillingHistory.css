@@ -1,0 +1,17 @@
+.billing-history {
+  padding: 20px 0;
+}
+
+/* Table animations for smooth row hover */
+.billing-history .table {
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

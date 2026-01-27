@@ -1,0 +1,52 @@
+.loading-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(15, 20, 35, 0.4) 0%,
+    rgba(59, 130, 246, 0.15) 50%,
+    rgba(15, 20, 35, 0.4) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: var(--radius-sm);
+  display: block;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.card-skeleton {
+  background: var(--gradient-card);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.card-skeleton .mt-2 {
+  margin-top: var(--spacing-sm);
+}
+
+.card-skeleton .mt-1 {
+  margin-top: var(--spacing-xs);
+}
+
+.table-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+}
+
+.table-row-skeleton {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: center;
+}
