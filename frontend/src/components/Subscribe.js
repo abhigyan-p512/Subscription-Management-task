@@ -9,7 +9,7 @@ import {
 import axios from 'axios';
 import './Subscribe.css';
 
-const API_URL = 'https://subscription-management-task-1.onrender.com';
+const API_URL = 'https://subscription-management-task-1.onrender.com/api';
 
 // Stripe Price IDs — set in .env:
 // REACT_APP_STRIPE_PRICE_MONTHLY, REACT_APP_STRIPE_PRICE_QUARTERLY, REACT_APP_STRIPE_PRICE_YEARLY
