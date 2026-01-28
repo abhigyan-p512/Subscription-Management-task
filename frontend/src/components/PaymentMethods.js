@@ -8,7 +8,7 @@ import {
 import axios from 'axios';
 import './PaymentMethods.css';
 
-const API_URL = 'https://subscription-management-task.onrender.com';
+const API_URL = 'https://subscription-management-task-1.onrender.com';
 
 function PaymentMethods({ user }) {
   const stripe = useStripe();
