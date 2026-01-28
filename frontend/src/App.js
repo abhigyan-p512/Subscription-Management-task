@@ -10,7 +10,7 @@ import Profile from './components/Profile';
 import LandingPage from './components/LandingPage';
 import './App.css';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_URL = 'https://subscription-management-task.onrender.com';
 
 // Configure axios to include token in requests
 axios.interceptors.request.use(
