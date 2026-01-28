@@ -52,7 +52,10 @@ function Dashboard({ user }) {
 
       const [subscriptionRes, invoiceRes] = await Promise.all([
         axios.get(`${API_URL}/subscriptions/${user.stripeCustomerId}`).catch(() => null),
-        axios.get(`${API_URL}/invoices/upcoming/${user.stripeCustomerId}`).catch(() => null)
+        axios.get(`${API_URL}/invoices/upcoming/${user.stripeCustomerId}`).catch((err) => {
+          console.warn('Could not fetch upcoming invoice:', err.response?.data?.error || err.message);
+          return null;
+        })
       ]);
 
       if (subscriptionRes) {

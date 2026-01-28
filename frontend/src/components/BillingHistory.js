@@ -12,22 +12,33 @@ function BillingHistory({ user }) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetchBillingData();
-  }, [user]);
+    if (user?.stripeCustomerId) {
+      fetchBillingData();
+    } else {
+      setLoading(false);
+    }
+  }, [user?.stripeCustomerId]);
 
   const fetchBillingData = async () => {
     try {
       setLoading(true);
       setError(null);
 
+      const headers = {
+        Authorization: `Bearer ${localStorage.getItem('authToken')}`
+      };
+
       const [historyRes, upcomingRes] = await Promise.all([
-        axios.get(`${API_URL}/invoices/history/${user.stripeCustomerId}`),
-        axios.get(`${API_URL}/invoices/upcoming/${user.stripeCustomerId}`).catch(() => null)
+        axios.get(`${API_URL}/invoices/history/${user.stripeCustomerId}`, { headers }),
+        axios.get(`${API_URL}/invoices/upcoming/${user.stripeCustomerId}`, { headers }).catch((err) => {
+          console.warn('Could not fetch upcoming invoice:', err.response?.data?.error || err.message);
+          return null;
+        })
       ]);
 
-      setInvoices(historyRes.data.invoices);
+      setInvoices(historyRes.data.invoices || []);
 
-      if (upcomingRes) {
+      if (upcomingRes?.data?.upcomingInvoice) {
         setUpcomingInvoice(upcomingRes.data.upcomingInvoice);
       }
     } catch (err) {
@@ -112,6 +123,21 @@ function BillingHistory({ user }) {
               </div>
             </div>
           </div>
+        </motion.div>
+      )}
+
+      {!upcomingInvoice && (
+        <motion.div 
+          className="card"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          style={{ backgroundColor: 'var(--card-background)', padding: '20px', textAlign: 'center' }}
+        >
+          <p style={{ color: 'var(--text-secondary)', marginBottom: '10px' }}>No active subscription found</p>
+          <p style={{ color: 'var(--text-tertiary)', fontSize: '14px' }}>
+            Subscribe to a plan to see upcoming invoices
+          </p>
         </motion.div>
       )}
 

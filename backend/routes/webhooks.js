@@ -4,7 +4,6 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const User = require('../models/User');
 const Subscription = require('../models/Subscription');
 const Invoice = require('../models/Invoice');
-const notificationService = require('../services/notificationService');
 
 router.post('/stripe', express.raw({ type: 'application/json' }), async (req, res) => {
   const sig = req.headers['stripe-signature'];
@@ -89,18 +88,6 @@ async function handleInvoicePaid(invoice) {
       });
       await newInvoice.save();
     }
-
-    // Create notification
-    const user = await User.findById(subscription.userId);
-    if (user) {
-      await notificationService.createNotificationByCustomerId(
-        user.stripeCustomerId,
-        'invoice_paid',
-        'Payment Successful',
-        `Your payment of $${(invoice.amount_paid / 100).toFixed(2)} has been processed successfully.`,
-        { invoiceId: invoice.id, amount: invoice.amount_paid, currency: invoice.currency }
-      );
-    }
   } catch (error) {
     console.error('Error handling invoice.paid:', error);
   }
@@ -169,36 +156,6 @@ async function handleSubscriptionUpdated(subscription) {
       dbSubscription.currentPeriodStart = new Date(subscription.current_period_start * 1000);
       dbSubscription.cancelAtPeriodEnd = subscription.cancel_at_period_end;
       await dbSubscription.save();
-
-      // Create notification for status changes
-      const user = await User.findById(dbSubscription.userId);
-      if (user) {
-        if (!wasCanceled && isNowCanceled) {
-          await notificationService.createNotificationByCustomerId(
-            user.stripeCustomerId,
-            'subscription_cancelled',
-            'Subscription Cancelled',
-            'Your subscription has been scheduled for cancellation at the end of the current billing period.',
-            { subscriptionId: subscription.id }
-          );
-        } else if (wasCanceled && !isNowCanceled) {
-          await notificationService.createNotificationByCustomerId(
-            user.stripeCustomerId,
-            'subscription_resumed',
-            'Subscription Resumed',
-            'Your subscription has been resumed successfully.',
-            { subscriptionId: subscription.id }
-          );
-        } else if (statusChanged && subscription.status === 'active') {
-          await notificationService.createNotificationByCustomerId(
-            user.stripeCustomerId,
-            'subscription_updated',
-            'Subscription Updated',
-            'Your subscription has been updated successfully.',
-            { subscriptionId: subscription.id, status: subscription.status }
-          );
-        }
-      }
     }
   } catch (error) {
     console.error('Error handling subscription.updated:', error);

@@ -7,7 +7,6 @@ import Subscribe from './components/Subscribe';
 import BillingHistory from './components/BillingHistory';
 import PaymentMethods from './components/PaymentMethods';
 import Profile from './components/Profile';
-import Notifications from './components/Notifications';
 import LandingPage from './components/LandingPage';
 import './App.css';
 
@@ -81,16 +80,23 @@ function App() {
   const handleLogin = async (emailOrUsername, password) => {
     try {
       setLoading(true);
+      console.log('Attempting login with:', { emailOrUsername });
       const response = await axios.post(`${API_URL}/auth/login`, { emailOrUsername, password });
+      console.log('Login response:', response.data);
       const { token, user: newUser } = response.data;
+      
+      if (!token || !newUser) {
+        throw new Error('Invalid response from server');
+      }
       
       setUser(newUser);
       localStorage.setItem('authToken', token);
       localStorage.setItem('stripeCustomerId', newUser.stripeCustomerId);
+      console.log('Login successful, navigating to dashboard');
       navigate('/dashboard');
     } catch (error) {
       console.error('Error logging in:', error);
-      const errorMessage = error.response?.data?.error || error.response?.data?.errors?.[0]?.msg || 'Failed to login';
+      const errorMessage = error.response?.data?.error || error.response?.data?.errors?.[0]?.msg || error.message || 'Failed to login';
       throw new Error(errorMessage);
     } finally {
       setLoading(false);
@@ -100,16 +106,23 @@ function App() {
   const handleSignup = async (username, email, password) => {
     try {
       setLoading(true);
+      console.log('Attempting signup with:', { username, email });
       const response = await axios.post(`${API_URL}/auth/signup`, { username, email, password });
+      console.log('Signup response:', response.data);
       const { token, user: newUser } = response.data;
+      
+      if (!token || !newUser) {
+        throw new Error('Invalid response from server');
+      }
       
       setUser(newUser);
       localStorage.setItem('authToken', token);
       localStorage.setItem('stripeCustomerId', newUser.stripeCustomerId);
+      console.log('Signup successful, navigating to dashboard');
       navigate('/dashboard');
     } catch (error) {
       console.error('Error signing up:', error);
-      const errorMessage = error.response?.data?.error || error.response?.data?.errors?.[0]?.msg || 'Failed to create account';
+      const errorMessage = error.response?.data?.error || error.response?.data?.errors?.[0]?.msg || error.message || 'Failed to create account';
       throw new Error(errorMessage);
     } finally {
       setLoading(false);
@@ -152,7 +165,6 @@ function App() {
               <NavLink to="/billing">Billing History</NavLink>
               <NavLink to="/payment-methods">Payment Methods</NavLink>
               <NavLink to="/profile">Profile</NavLink>
-              <NavLink to="/notifications">Notifications</NavLink>
             </div>
             <div className="nav-actions">
               <motion.button 
@@ -177,7 +189,6 @@ function App() {
             <Route path="/billing" element={<BillingHistory user={user} />} />
             <Route path="/payment-methods" element={<PaymentMethods user={user} />} />
             <Route path="/profile" element={<Profile user={user} onUpdate={handleProfileUpdate} />} />
-            <Route path="/notifications" element={<Notifications user={user} />} />
           </Routes>
         </AnimatePresence>
       </div>

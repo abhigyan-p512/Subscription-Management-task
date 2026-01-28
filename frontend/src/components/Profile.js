@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { motion } from 'framer-motion';
 import axios from 'axios';
 import './Profile.css';
 
@@ -21,6 +20,7 @@ function Profile({ user, onUpdate }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [avatarUploading, setAvatarUploading] = useState(false);
 
   const [avatarDataUrl, setAvatarDataUrl] = useState(() => {
     try {
@@ -121,7 +121,7 @@ function Profile({ user, onUpdate }) {
     return isActive ? 'Active' : 'Inactive';
   };
 
-  const handleAvatarSelect = (file) => {
+  const handleAvatarSelect = async (file) => {
     if (!file) return;
     if (!file.type.startsWith('image/')) {
       setError('Please select an image file');
@@ -132,6 +132,9 @@ function Profile({ user, onUpdate }) {
       return;
     }
 
+    setAvatarUploading(true);
+    setError('');
+
     const reader = new FileReader();
     reader.onload = () => {
       const dataUrl = String(reader.result || '');
@@ -141,6 +144,11 @@ function Profile({ user, onUpdate }) {
       } catch {
         // ignore storage issues
       }
+      setAvatarUploading(false);
+    };
+    reader.onerror = () => {
+      setError('Failed to read image file');
+      setAvatarUploading(false);
     };
     reader.readAsDataURL(file);
   };
@@ -211,207 +219,261 @@ function Profile({ user, onUpdate }) {
     }
   };
 
-  return (
-    <motion.div
-      className="profile"
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.45 }}
-    >
-      <div className="page-header">
-        <h2>Profile Settings</h2>
-        <p>Manage your account information</p>
-      </div>
+  const getStatusClass = (status) => {
+    if (!status) return 'status-none';
+    const isActive = status === 'active' || status === 'trialing';
+    return isActive ? 'status-active' : 'status-inactive';
+  };
 
-      <div className="profile-layout">
-        <motion.aside
-          className="profile-sidebar"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.05 }}
-        >
-          <div className="card profile-identity">
-            <div className="profile-identity-top">
-              <div className="avatar">
-                {avatarDataUrl ? (
-                  <img className="avatar-image" src={avatarDataUrl} alt="Profile avatar" />
+  return (
+    <div className="profile-container">
+      {/* Header Section */}
+      <div className="profile-hero">
+        <div className="hero-content">
+          <div className="hero-avatar-section">
+            <div className="avatar-wrapper">
+              <div className="avatar-circle">
+                {avatarUploading ? (
+                  <div className="avatar-loading">
+                    <div className="loading-spinner" />
+                  </div>
+                ) : avatarDataUrl ? (
+                  <img
+                    className="avatar-image"
+                    src={avatarDataUrl}
+                    alt="Profile"
+                  />
                 ) : (
-                  <div className="avatar-fallback" style={{ background: `hsl(${avatarHue} 75% 40%)` }}>
-                    {initials}
+                  <div
+                    className="avatar-fallback"
+                    style={{
+                      background: `linear-gradient(135deg, hsl(${avatarHue}, 70%, 50%), hsl(${avatarHue + 30}, 70%, 45%))`
+                    }}
+                  >
+                    <span className="avatar-initials">{initials}</span>
                   </div>
                 )}
               </div>
-              <div className="profile-identity-text">
-                <div className="profile-name">{displayName}</div>
-                <div className="profile-email">{user.email}</div>
-              </div>
-            </div>
 
-            <div className="profile-identity-actions">
-              <label className="btn btn-secondary profile-upload-btn">
-                Upload Avatar
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => handleAvatarSelect(e.target.files?.[0])}
-                  disabled={loading}
-                />
-              </label>
-              {avatarDataUrl && (
-                <button type="button" className="btn btn-danger" onClick={handleAvatarRemove} disabled={loading}>
-                  Remove
-                </button>
-              )}
+              <div className="avatar-actions">
+                <label className="avatar-upload-btn">
+                  Upload
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handleAvatarSelect(e.target.files?.[0])}
+                    disabled={loading || avatarUploading}
+                  />
+                </label>
+                {avatarDataUrl && (
+                  <button
+                    className="avatar-remove-btn"
+                    onClick={handleAvatarRemove}
+                    disabled={loading || avatarUploading}
+                  >
+                    Remove
+                  </button>
+                )}
+              </div>
             </div>
           </div>
 
-          <div className="card profile-overview">
-            <h3>Account Overview</h3>
-
-            <div className="profile-kv">
-              <div className="kv-row">
-                <div className="kv-key">User ID</div>
-                <div className="kv-value" title={user.id}>{maskId(user.id)}</div>
+          <div className="hero-info">
+            <h1 className="profile-title">Welcome back, {displayName}!</h1>
+            <p className="profile-subtitle">Manage your account settings and preferences</p>
+            <div className="profile-meta">
+              <div className="meta-item">
+                <span className="meta-label">Member since</span>
+                <span className="meta-value">
+                  {user.createdAt ? formatDate(user.createdAt) : 'Recently'}
+                </span>
               </div>
-              <div className="kv-row">
-                <div className="kv-key">Stripe Customer</div>
-                <div className="kv-value" title={user.stripeCustomerId}>{maskId(user.stripeCustomerId)}</div>
+              <div className="meta-item">
+                <span className="meta-label">Account ID</span>
+                <span className="meta-value">{maskId(user.id)}</span>
               </div>
-              {user.createdAt && (
-                <div className="kv-row">
-                  <div className="kv-key">Member since</div>
-                  <div className="kv-value">{formatDate(user.createdAt)}</div>
-                </div>
-              )}
             </div>
+          </div>
+        </div>
+      </div>
 
-            <div className="profile-divider" />
+      {/* Main Content Grid */}
+      <div className="profile-grid">
+        {/* Account Overview Card */}
+        <div className="profile-card overview-card">
+          <div className="card-header">
+            <div>
+              <h3>Account Overview</h3>
+              <p>Your subscription and payment details</p>
+            </div>
+          </div>
 
-            <div className="profile-kv">
-              <div className="kv-row">
-                <div className="kv-key">Subscription</div>
-                <div className="kv-value">
-                  {summaryLoading
-                    ? 'Loading…'
-                    : subscriptionSummary
-                      ? normalizeSubscriptionStatusLabel(subscriptionSummary.status)
-                      : 'None'}
+          <div className="card-content">
+            <div className="overview-grid">
+              {/* Subscription Status */}
+              <div className="overview-item">
+                <div className="item-content">
+                  <span className="item-label">Subscription</span>
+                  <span className={`item-value ${getStatusClass(subscriptionSummary?.status)}`}>
+                    {summaryLoading ? (
+                      <div className="skeleton-text" />
+                    ) : (
+                      subscriptionSummary ? normalizeSubscriptionStatusLabel(subscriptionSummary.status) : 'None'
+                    )}
+                  </span>
                 </div>
               </div>
-              <div className="kv-row">
-                <div className="kv-key">Plan</div>
-                <div className="kv-value">
-                  {summaryLoading ? 'Loading…' : subscriptionSummary ? getPlanNameByPriceId(subscriptionSummary.priceId) : 'N/A'}
+
+              {/* Current Plan */}
+              <div className="overview-item">
+                <div className="item-content">
+                  <span className="item-label">Current Plan</span>
+                  <span className="item-value">
+                    {summaryLoading ? (
+                      <div className="skeleton-text" />
+                    ) : (
+                      subscriptionSummary ? getPlanNameByPriceId(subscriptionSummary.priceId) : 'Free'
+                    )}
+                  </span>
                 </div>
               </div>
-              <div className="kv-row">
-                <div className="kv-key">Next renewal</div>
-                <div className="kv-value">
-                  {summaryLoading ? 'Loading…' : subscriptionSummary?.currentPeriodEnd ? formatDate(subscriptionSummary.currentPeriodEnd) : 'N/A'}
+
+              {/* Next Billing */}
+              <div className="overview-item">
+                <div className="item-content">
+                  <span className="item-label">Next Billing</span>
+                  <span className="item-value">
+                    {summaryLoading ? (
+                      <div className="skeleton-text" />
+                    ) : (
+                      subscriptionSummary?.currentPeriodEnd ? formatDate(subscriptionSummary.currentPeriodEnd) : 'N/A'
+                    )}
+                  </span>
                 </div>
               </div>
-              <div className="kv-row">
-                <div className="kv-key">Payment methods</div>
-                <div className="kv-value">{summaryLoading ? 'Loading…' : paymentSummary ? `${paymentSummary.count}` : '0'}</div>
+
+              {/* Payment Methods */}
+              <div className="overview-item">
+                <div className="item-content">
+                  <span className="item-label">Payment Methods</span>
+                  <span className="item-value">
+                    {summaryLoading ? (
+                      <div className="skeleton-text" />
+                    ) : (
+                      `${paymentSummary?.count || 0} saved`
+                    )}
+                  </span>
+                </div>
               </div>
-              {paymentSummary?.defaultLast4 && (
-                <div className="kv-row">
-                  <div className="kv-key">Default card</div>
-                  <div className="kv-value">
-                    {(paymentSummary.defaultBrand || 'CARD').toUpperCase()} •••• {paymentSummary.defaultLast4}
+            </div>
+          </div>
+        </div>
+
+        {/* Profile Settings Card */}
+        <div className="profile-card settings-card">
+          <div className="card-header">
+            <div>
+              <h3>Account Settings</h3>
+              <p>Update your profile information</p>
+            </div>
+          </div>
+
+          <div className="card-content">
+            <form onSubmit={handleSubmit} className="settings-form">
+              <div className="form-section">
+                <h4>Profile Information</h4>
+                <div className="form-row">
+                  <div className="form-group">
+                    <label htmlFor="username">Username</label>
+                    <input
+                      type="text"
+                      id="username"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      required
+                      minLength={3}
+                      maxLength={30}
+                      pattern="[a-zA-Z0-9_]+"
+                      disabled={loading}
+                      placeholder="Enter your username"
+                    />
+                    <span className="form-help">3-30 characters, letters, numbers, and underscores only</span>
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="email">Email Address</label>
+                    <input
+                      type="email"
+                      id="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      disabled={loading}
+                      placeholder="Enter your email address"
+                    />
                   </div>
                 </div>
-              )}
-            </div>
-          </div>
-        </motion.aside>
-
-        <motion.section
-          className="profile-main"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.08 }}
-        >
-          <div className="card">
-            <h3 className="profile-section-title">Edit Profile</h3>
-
-            <form onSubmit={handleSubmit}>
-              <div className="input-group">
-                <label htmlFor="username">Username</label>
-                <input
-                  type="text"
-                  id="username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  required
-                  minLength={3}
-                  maxLength={30}
-                  pattern="[a-zA-Z0-9_]+"
-                  disabled={loading}
-                />
-                <small className="profile-help">3-30 characters, letters, numbers, and underscores only</small>
               </div>
 
-              <div className="input-group">
-                <label htmlFor="email">Email Address</label>
-                <input
-                  type="email"
-                  id="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  disabled={loading}
-                />
+              <div className="form-section">
+                <h4>Change Password</h4>
+                <div className="form-row">
+                  <div className="form-group">
+                    <label htmlFor="password">New Password</label>
+                    <input
+                      type="password"
+                      id="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      disabled={loading}
+                      placeholder="Leave blank to keep current"
+                      autoComplete="new-password"
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="confirmPassword">Confirm Password</label>
+                    <input
+                      type="password"
+                      id="confirmPassword"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      disabled={loading}
+                      placeholder="Confirm new password"
+                      autoComplete="new-password"
+                    />
+                  </div>
+                </div>
               </div>
 
-              <div className="profile-divider" />
-
-              <h4 className="profile-subtitle">Security</h4>
-
-              <div className="input-group">
-                <label htmlFor="password">New Password (leave blank to keep current)</label>
-                <input
-                  type="password"
-                  id="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  disabled={loading}
-                  placeholder="Enter new password"
-                />
-              </div>
-
-              {password && (
-                <div className="input-group">
-                  <label htmlFor="confirmPassword">Confirm New Password</label>
-                  <input
-                    type="password"
-                    id="confirmPassword"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    disabled={loading}
-                    placeholder="Confirm new password"
-                  />
+              {/* Error/Success Messages */}
+              {error && (
+                <div className="alert alert-error">
+                  <span className="alert-icon">!</span>
+                  {error}
                 </div>
               )}
 
-              {error && <div className="error-message">{error}</div>}
-              {success && <div className="success-message">{success}</div>}
+              {success && (
+                <div className="alert alert-success">
+                  <span className="alert-icon">✓</span>
+                  {success}
+                </div>
+              )}
 
-              <motion.button
+              {/* Submit Button */}
+              <button
                 type="submit"
-                className="btn btn-primary"
+                className="btn-primary"
                 disabled={loading}
-                style={{ marginTop: '16px' }}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
               >
                 {loading ? 'Updating...' : 'Save Changes'}
-              </motion.button>
+              </button>
             </form>
           </div>
-        </motion.section>
+        </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
 

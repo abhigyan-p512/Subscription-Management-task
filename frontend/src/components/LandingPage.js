@@ -2,20 +2,6 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './LandingPage.css';
 
-/* Use local images from public/images/ when available, or themed placeholders */
-const IMAGES = {
-  heroPreview: `${process.env.PUBLIC_URL || ''}/images/hero-preview.png`,
-  previewDashboard: `${process.env.PUBLIC_URL || ''}/images/preview-dashboard.png`,
-  previewBilling: `${process.env.PUBLIC_URL || ''}/images/preview-billing.png`,
-  previewPlans: `${process.env.PUBLIC_URL || ''}/images/preview-plans.png`,
-};
-const FALLBACK_IMAGES = {
-  heroPreview: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=900&q=80',
-  previewDashboard: 'https://images.unsplash.com/photo-1460925895917-afdab827c67f?w=800&q=80',
-  previewBilling: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&q=80',
-  previewPlans: 'https://images.unsplash.com/photo-1551434678-e076c223a692?w=800&q=80',
-};
-
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: (i = 1) => ({
@@ -36,34 +22,28 @@ const itemVariants = {
 
 const features = [
   {
-    icon: '◆',
-    title: 'Track Everything',
-    desc: "Monitor all your subscriptions in one centralized dashboard. Never lose track of what you're paying for.",
-  },
-  {
-    icon: '◇',
     title: 'Secure Payments',
-    desc: 'Powered by Stripe, your payment information is always secure and encrypted. We never store your card details.',
+    desc: 'Powered by Stripe with bank-level security. Your payment information is always protected.',
   },
   {
-    icon: '◈',
+    title: 'Track Everything',
+    desc: 'Monitor all your subscriptions in one centralized dashboard. Never lose track of your payments.',
+  },
+  {
     title: 'Billing History',
-    desc: 'Access your complete billing history anytime. Download invoices and track your spending patterns.',
+    desc: 'Access complete billing history with downloadable invoices and spending analytics.',
   },
   {
-    icon: '▷',
     title: 'Easy Management',
-    desc: 'Subscribe, cancel, or update your plans with just a few clicks. No complicated processes.',
+    desc: 'Subscribe, cancel, or update plans with just a few clicks. No complicated processes.',
   },
   {
-    icon: '◎',
-    title: 'Stay Informed',
-    desc: 'Get notified about upcoming renewals and payment status. Never miss an important update.',
+    title: 'Smart Notifications',
+    desc: 'Get notified about upcoming renewals and payment status. Stay on top of your subscriptions.',
   },
   {
-    icon: '⬡',
-    title: 'Reliable Service',
-    desc: 'Built with modern technology and best practices. Your data is safe and your service is always available.',
+    title: 'Lightning Fast',
+    desc: 'Built with modern technology for reliable performance and instant updates.',
   },
 ];
 
@@ -77,7 +57,6 @@ function LandingPage({ onLogin, onSignup }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [showAuthForm, setShowAuthForm] = useState(false);
-  const [hoveredFeature, setHoveredFeature] = useState(null);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -147,112 +126,59 @@ function LandingPage({ onLogin, onSignup }) {
   return (
     <div className="landing-page">
       <div className="lp-bg">
-        <div className="lp-grid" aria-hidden="true" />
+        <div className="lp-grid" />
         <div className="lp-orbs">
-          <motion.div
-            className="lp-orb lp-orb-1"
-            animate={{
-              x: [0, 30, 0],
-              y: [0, -20, 0],
-              scale: [1, 1.1, 1],
-              opacity: [0.4, 0.7, 0.4],
-            }}
-            transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-          />
-          <motion.div
-            className="lp-orb lp-orb-2"
-            animate={{
-              x: [0, -25, 0],
-              y: [0, 15, 0],
-              scale: [1.1, 1, 1.1],
-              opacity: [0.3, 0.6, 0.3],
-            }}
-            transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
-          />
-          <motion.div
-            className="lp-orb lp-orb-3"
-            animate={{
-              x: [0, 20, 0],
-              y: [0, 25, 0],
-              opacity: [0.2, 0.5, 0.2],
-            }}
-            transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
-          />
+          <div className="lp-orb lp-orb-1" />
+          <div className="lp-orb lp-orb-2" />
+          <div className="lp-orb lp-orb-3" />
+          <div className="lp-orb lp-orb-4" />
+          <div className="lp-orb lp-orb-5" />
         </div>
-        <div className="lp-glow-line lp-glow-line-1" />
-        <div className="lp-glow-line lp-glow-line-2" />
       </div>
 
       <section className="hero-section">
-        <div className={`container hero-container ${!showAuthForm ? 'hero-container--with-image' : ''}`}>
-          <motion.div
-            className="hero-content"
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-          >
-            <motion.div className="hero-badge" variants={itemVariants}>
-              <span className="hero-badge-dot" />
-              <span className="hero-badge-text">Next‑gen subscription control</span>
-            </motion.div>
-            <motion.h1 className="hero-title" variants={itemVariants}>
-              Manage Subscriptions
-              <span className="gradient-text"> Effortlessly</span>
-            </motion.h1>
-            <motion.p className="hero-subtitle" variants={itemVariants}>
-              One place to track, manage, and optimize recurring payments. <br className="hero-subtitle-break" />
-              <span className="hero-subtitle-highlight">Secure, fast, built for the future.</span>
-            </motion.p>
+        <div className="container">
+          <div className="hero-wrapper">
+            {/* Left Column */}
+            <motion.div
+              className="hero-left"
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+            >
+              <motion.div className="hero-badge" variants={itemVariants}>
+                <span className="hero-badge-dot" />
+                <span className="hero-badge-text">Subscription Management Made Simple</span>
+              </motion.div>
 
-            <AnimatePresence mode="wait">
-              {!showAuthForm ? (
-                <>
-                  <motion.div
-                    className="hero-cta-wrap"
-                    key="cta"
+              <motion.h1 className="hero-title" variants={itemVariants}>
+                Take Control of Your <span className="gradient-text">Subscriptions</span>
+              </motion.h1>
+
+              <AnimatePresence mode="wait">
+                {!showAuthForm ? (
+                  <motion.button
+                    type="button"
+                    className="hero-cta-btn"
+                    onClick={handleGetStarted}
                     variants={itemVariants}
                     initial="hidden"
                     animate="visible"
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.3 }}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                   >
-                    <motion.button
-                      type="button"
-                      className="btn btn-primary btn-large lp-cta-btn"
-                      onClick={handleGetStarted}
-                      whileHover={{ scale: 1.03, boxShadow: '0 0 40px rgba(59, 130, 246, 0.5)' }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      <span className="lp-cta-text">Get Started Free</span>
-                      <span className="lp-cta-arrow">→</span>
-                    </motion.button>
-                  </motion.div>
+                    <span>Get Started Free</span>
+                    <span className="arrow">→</span>
+                  </motion.button>
+                ) : (
                   <motion.div
-                    className="hero-visual"
-                    key="hero-img"
-                    variants={itemVariants}
-                    initial="hidden"
-                    animate="visible"
+                    key="auth"
+                    className="auth-form-container"
+                    initial={{ opacity: 0, y: 20, scale: 0.96 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.96 }}
+                    transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                   >
-                    <div className="hero-image-wrap">
-                      <div className="hero-image-glow" />
-                      <img
-                        src={IMAGES.heroPreview}
-                        alt="Subscription dashboard overview"
-                        onError={(e) => { e.target.onerror = null; e.target.src = FALLBACK_IMAGES.heroPreview; }}
-                      />
-                    </div>
-                  </motion.div>
-                </>
-              ) : (
-                <motion.div
-                  key="auth"
-                  className="auth-form-container"
-                  initial={{ opacity: 0, y: 24, scale: 0.96 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.96 }}
-                  transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                >
                   <div className="auth-tabs">
                     <button
                       type="button"
@@ -420,125 +346,145 @@ function LandingPage({ onLogin, onSignup }) {
                 </motion.div>
               )}
             </AnimatePresence>
-          </motion.div>
+            </motion.div>
+
+            {/* Right Column */}
+            <motion.div
+              className="hero-right"
+              initial={{ opacity: 0, x: 40 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              <div className="feature-list">
+                <p className="hero-subtitle">
+                  Track, manage, and optimize all your recurring payments in one place.
+                </p>
+                <div className="highlights">
+                  <span className="highlight">Secure</span>
+                  <span className="dot">•</span>
+                  <span className="highlight">Simple</span>
+                  <span className="dot">•</span>
+                  <span className="highlight">Smart</span>
+                </div>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </section>
 
       {!showAuthForm && (
-        <section className="lp-preview-section">
-          <div className="container">
-            <motion.h2
-              className="section-title lp-preview-title"
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
-              transition={{ duration: 0.6 }}
-            >
-              <span className="section-title-accent">//</span> See It In Action
-            </motion.h2>
-            <div className="lp-preview-grid">
-              {[
-                { key: 'dashboard', src: IMAGES.previewDashboard, fallback: FALLBACK_IMAGES.previewDashboard, alt: 'Dashboard view', caption: 'Unified dashboard' },
-                { key: 'billing', src: IMAGES.previewBilling, fallback: FALLBACK_IMAGES.previewBilling, alt: 'Billing & invoices', caption: 'Billing history' },
-                { key: 'plans', src: IMAGES.previewPlans, fallback: FALLBACK_IMAGES.previewPlans, alt: 'Plans & pricing', caption: 'Plans & upgrades' },
-              ].map((item, index) => (
+        <>
+          <section className="features-section">
+            <div className="container">
+              <motion.h2
+                className="section-title"
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-80px' }}
+                transition={{ duration: 0.6 }}
+              >
+                Why Choose Our Platform
+              </motion.h2>
+              <div className="features-grid">
+                {features.map((feature, index) => (
+                  <motion.div
+                    key={feature.title}
+                    className="feature-card"
+                    initial={{ opacity: 0, y: 28 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: '-40px' }}
+                    transition={{ duration: 0.5, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
+                    whileHover={{ y: -8, transition: { duration: 0.3 } }}
+                  >
+                    <h3>{feature.title}</h3>
+                    <p>{feature.desc}</p>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <section className="how-it-works-section">
+            <div className="container">
+              <motion.h2
+                className="section-title"
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-80px' }}
+                transition={{ duration: 0.6 }}
+              >
+                How It Works
+              </motion.h2>
+              <div className="steps-grid">
                 <motion.div
-                  key={item.key}
-                  className="lp-preview-card"
+                  className="step-card"
                   initial={{ opacity: 0, y: 28 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: '-40px' }}
-                  transition={{ duration: 0.5, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
-                  whileHover={{ y: -6 }}
+                  transition={{ duration: 0.5, delay: 0.1 }}
+                  whileHover={{ y: -8, transition: { duration: 0.3 } }}
                 >
-                  <div className="lp-preview-card-img">
-                    <img
-                      src={item.src}
-                      alt={item.alt}
-                      onError={(e) => { e.target.onerror = null; e.target.src = item.fallback; }}
-                    />
-                  </div>
-                  <p className="lp-preview-card-caption">{item.caption}</p>
+                  <div className="step-number">1</div>
+                  <h3>Sign Up</h3>
+                  <p>Create your account in seconds with secure authentication.</p>
                 </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      <section className="features-section">
-        <div className="container">
-          <motion.h2
-            className="section-title"
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.6 }}
-          >
-            <span className="section-title-accent">//</span> Why Choose Us
-          </motion.h2>
-          <div className="features-grid">
-            {features.map((feature, index) => (
-              <motion.div
-                key={feature.title}
-                className="feature-card"
-                initial={{ opacity: 0, y: 28 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-40px' }}
-                transition={{ duration: 0.5, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
-                whileHover={{ y: -8, transition: { duration: 0.3 } }}
-                onHoverStart={() => setHoveredFeature(index)}
-                onHoverEnd={() => setHoveredFeature(null)}
-              >
                 <motion.div
-                  className="feature-icon"
-                  animate={{
-                    scale: hoveredFeature === index ? 1.2 : 1,
-                    rotate: hoveredFeature === index ? 180 : 0,
-                  }}
-                  transition={{ type: 'spring', stiffness: 260, damping: 20 }}
+                  className="step-card"
+                  initial={{ opacity: 0, y: 28 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                  whileHover={{ y: -8, transition: { duration: 0.3 } }}
                 >
-                  {feature.icon}
+                  <div className="step-number">2</div>
+                  <h3>Add Subscriptions</h3>
+                  <p>Connect your payment methods and import existing subscriptions.</p>
                 </motion.div>
-                <h3>{feature.title}</h3>
-                <p>{feature.desc}</p>
-                <div className="feature-card-edge" />
-                <div className="feature-card-shine" />
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+                <motion.div
+                  className="step-card"
+                  initial={{ opacity: 0, y: 28 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.5, delay: 0.3 }}
+                  whileHover={{ y: -8, transition: { duration: 0.3 } }}
+                >
+                  <div className="step-number">3</div>
+                  <h3>Manage & Track</h3>
+                  <p>Monitor renewals, cancel plans, and optimize your spending.</p>
+                </motion.div>
+              </div>
+            </div>
+          </section>
 
-      <section className="cta-section">
-        <div className="container">
-          <motion.div
-            className="cta-content"
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2>Ready to Get Started?</h2>
-            <p>Join thousands managing subscriptions with clarity and control.</p>
-            {!showAuthForm && (
-              <motion.button
-                type="button"
-                className="btn btn-primary btn-large lp-cta-btn"
-                onClick={handleGetStarted}
-                whileHover={{ scale: 1.04, boxShadow: '0 0 48px rgba(59, 130, 246, 0.45)' }}
-                whileTap={{ scale: 0.98 }}
+          <section className="cta-section">
+            <div className="container">
+              <motion.div
+                className="cta-content"
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
               >
-                Start Managing Now
-              </motion.button>
-            )}
-          </motion.div>
-        </div>
-      </section>
+                <h2>Ready to Get Started?</h2>
+                <p>Join thousands managing their subscriptions with confidence.</p>
+                <motion.button
+                  type="button"
+                  className="btn btn-primary btn-large lp-cta-btn"
+                  onClick={handleGetStarted}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  Start Managing Now
+                </motion.button>
+              </motion.div>
+            </div>
+          </section>
+        </>
+      )}
 
       <footer className="landing-footer">
         <div className="container">
-          <p>&copy; 2026 Subscription Management. All rights reserved.</p>
+          <p>&copy; 2026 Subscription Management. Built with love using MERN & Stripe.</p>
         </div>
       </footer>
     </div>

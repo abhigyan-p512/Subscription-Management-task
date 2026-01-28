@@ -34,7 +34,6 @@ app.use('/api/subscriptions', require('./routes/subscriptions'));
 app.use('/api/invoices', require('./routes/invoices'));
 app.use('/api/webhooks', require('./routes/webhooks'));
 app.use('/api/payment-methods', require('./routes/paymentMethods'));
-app.use('/api/notifications', require('./routes/notifications'));
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'Server is running' });
