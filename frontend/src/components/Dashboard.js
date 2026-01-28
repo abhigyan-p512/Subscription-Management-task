@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import axios from 'axios';
 import './Dashboard.css';
 
-const API_URL = 'https://subscription-management-task-1.onrender.com';
+const API_URL = 'https://subscription-management-task-1.onrender.com/api'
 
 // Price plans (should match Subscribe.js)
 const PRICE_PLANS = [
