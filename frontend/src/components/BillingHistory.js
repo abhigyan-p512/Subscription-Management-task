@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import axios from 'axios';
 import './BillingHistory.css';
 
-const API_URL = 'https://subscription-management-task-1.onrender.com';
+const API_URL = 'https://subscription-management-task-1.onrender.com/api';
 
 function BillingHistory({ user }) {
   const [invoices, setInvoices] = useState([]);
