@@ -482,11 +482,7 @@ function LandingPage({ onLogin, onSignup }) {
         </>
       )}
 
-      <footer className="landing-footer">
-        <div className="container">
-          <p>&copy; 2026 Subscription Management. Built with love using MERN & Stripe.</p>
-        </div>
-      </footer>
+      
     </div>
   );
 }
