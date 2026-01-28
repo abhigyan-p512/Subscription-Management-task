@@ -418,8 +418,14 @@ function Subscribe({ user }) {
                     </div>
                   )}
                   <form onSubmit={handleSubmit} id="payment-form">
-                    <div className="input-group">
-                      <label>Card Details</label>
+                    <div className="input-group card-details-section">
+                      <div className="card-details-header">
+                        <label className="card-details-label">💳 Card Details</label>
+                        <span className="card-details-badge">Secure Payment</span>
+                      </div>
+                      <p className="card-details-description">
+                        Enter your card information below. Your payment is encrypted and secure.
+                      </p>
                       <div className="stripe-element-wrapper">
                         <CardElement
                           options={{
@@ -428,8 +434,10 @@ function Subscribe({ user }) {
                                 fontSize: '16px',
                                 color: '#e5e7eb',
                                 fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+                                lineHeight: '1.8',
                                 '::placeholder': {
-                                  color: '#9ca3af',
+                                  color: '#6b7280',
+                                  fontSize: '16px',
                                 },
                               },
                               invalid: {
@@ -441,13 +449,13 @@ function Subscribe({ user }) {
                                 iconColor: '#4ade80',
                               },
                             },
-                            hidePostalCode: false, // Show ZIP/Postal code field
+                            hidePostalCode: true, // Hide ZIP/Postal code field
+                            iconStyle: 'solid'
                           }}
                         />
                       </div>
-                      <p className="testing-hint">
-                        For testing: Use any valid ZIP code (e.g., 12345, 90210, or any 5-digit number)
-                      </p>
+                      <div className="card-details-footer">
+                      </div>
                     </div>
                   </form>
                 </>

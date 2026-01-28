@@ -167,9 +167,15 @@ function PaymentMethods({ user }) {
           <div className="add-card-panel">
             <h4>Add New Payment Method</h4>
             <form onSubmit={handleAddPaymentMethod}>
-              <div className="input-group">
-                <label>Card Details</label>
-                <div className="stripe-element-wrapper">
+              <div className="input-group card-details-section">
+                <div className="card-details-header">
+                  <label className="card-details-label">💳 Card Details</label>
+                  <span className="card-details-badge">Secure</span>
+                </div>
+                <p className="card-details-description">
+                  Your card information is encrypted and secure.
+                </p>
+                <div className="card-details-stripe-wrapper">
                   <CardElement
                     options={{
                       style: {
@@ -177,8 +183,10 @@ function PaymentMethods({ user }) {
                           fontSize: '16px',
                           color: '#f8fafc',
                           fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+                          lineHeight: '1.8',
                           '::placeholder': {
-                            color: '#94a3b8',
+                            color: '#64748b',
+                            fontSize: '16px',
                           },
                         },
                         invalid: {
@@ -190,11 +198,13 @@ function PaymentMethods({ user }) {
                           iconColor: '#4ade80',
                         },
                       },
-                      hidePostalCode: false,
+                      hidePostalCode: true,
+                      iconStyle: 'solid'
                     }}
                   />
                 </div>
-                <p className="pm-hint">Test card: 4242 4242 4242 4242 • Any future expiry • Any CVC • Any ZIP</p>
+                <div className="card-details-footer">
+                </div>
               </div>
               <button
                 type="submit"
