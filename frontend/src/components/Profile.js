@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
 import './Profile.css';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_URL = 'https://subscription-management-task.onrender.com';
 const AVATAR_STORAGE_PREFIX = 'sm:avatar:';
 
 // Price plans (keep in sync with Subscribe/Dashboard)
