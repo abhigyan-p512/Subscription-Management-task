@@ -6,7 +6,7 @@ require('dotenv').config();
 const app = express();
 
 app.use(cors({
-  origin: ' https://subscription-management-task-frontend.onrender.com',
+  origin: 'https://subscription-management-task-frontend.onrender.com',
   credentials: true
 }));
 
